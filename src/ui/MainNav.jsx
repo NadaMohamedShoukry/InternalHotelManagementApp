@@ -1,12 +1,20 @@
+/* eslint-disable no-unused-vars */
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-
+import {
+  HiOutlineCalendarDays,
+  HiOutlineCog6Tooth,
+  HiOutlineHome,
+  HiOutlineHomeModern,
+  HiOutlineUsers,
+} from "react-icons/hi2";
 const NavList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
 `;
 
-const Link = styled.a`
+const Link = styled(NavLink)`
   &:link,
   &:visited {
     display: flex;
@@ -44,3 +52,48 @@ const Link = styled.a`
     color: var(--color-brand-600);
   }
 `;
+function MainNav() {
+  return (
+    <nav>
+      <NavList>
+        <li>
+          {/* To prevent full page reloads, 
+          we use the NavLink component provided by React Router. 
+          This component enables smooth navigation between pages without causing page transitions or reloads.
+           We replace the anchor tags with NavLink components 
+          and use the to prop to specify the target routes. */}
+          <Link to="/dashboard">
+            <HiOutlineHome />
+            <span>Home</span>
+          </Link>
+          <li>
+            <Link to="/bookings">
+              <HiOutlineCalendarDays />
+              <span>Bookings</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/cabins">
+              <HiOutlineHomeModern />
+              <span>Cabins</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/users">
+              <HiOutlineUsers />
+              <span>Users</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/settings">
+              <HiOutlineCog6Tooth />
+              <span>Settings</span>
+            </Link>
+          </li>
+        </li>
+      </NavList>
+    </nav>
+  );
+}
+
+export default MainNav;
