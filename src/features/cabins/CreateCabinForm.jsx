@@ -13,7 +13,7 @@ import { useCreateCabin } from "./useCreateCabin";
 import { useEditCabin } from "./useEditCabin";
 
 //cabinToEdit might not exist so add a default value {}
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
   const { id: editID, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editID);
   //register to allow react -hook - form to handle them.
@@ -36,6 +36,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           onSuccess: (data) => {
             console.log(data);
             reset();
+            onCloseModal?.();
           },
         }
       );
@@ -46,6 +47,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           onSuccess: (data) => {
             console.log(data);
             reset();
+            onCloseModal?.();
           },
         }
       );
@@ -54,7 +56,10 @@ function CreateCabinForm({ cabinToEdit = {} }) {
     console.log(errors);
   }
   return (
-    <Form onSubmit={handleSubmit(onSumbit, onError)}>
+    <Form
+      onSubmit={handleSubmit(onSumbit, onError)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
@@ -146,7 +151,11 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button
+          variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}
+        >
           Cancel
         </Button>
         <Button disabled={isCreating}>

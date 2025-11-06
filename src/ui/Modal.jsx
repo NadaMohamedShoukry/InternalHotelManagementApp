@@ -1,3 +1,7 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+import { createPortal } from "react-dom";
+import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
 
 const StyledModal = styled.div`
@@ -48,3 +52,23 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+
+function Modal({ children, onClose }) {
+  return createPortal(
+    <Overlay>
+      <StyledModal>
+        <Button onClick={onClose}>
+          <HiXMark />
+        </Button>
+        <div>{children}</div>
+      </StyledModal>
+    </Overlay>,
+    // this is going to be the parent of the rendered jsx
+    // so now the modal is one of the body's children .
+    // DOM note.
+    //some developers say this is not ideal but it works fine
+    document.body
+  );
+}
+
+export default Modal;
