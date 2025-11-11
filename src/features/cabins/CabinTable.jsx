@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Spinner from "../../ui/Spinner";
 import CabinRow from "./CabinRow";
 import { useGetCabins } from "./useGetCabins";
@@ -8,14 +9,24 @@ import { useSearchParams } from "react-router-dom";
 function CabinTable() {
   const { cabins, isLoading } = useGetCabins();
   const [searchParams] = useSearchParams();
+
+  //Filter
   const filterValue = searchParams.get("discount") || "all";
-  let filterCabins;
+  let filterCabins = cabins || [];
   if (filterValue === "all") filterCabins = cabins;
   if (filterValue === "no-discount")
     filterCabins = cabins.filter((cabin) => cabin.discount === 0);
   if (filterValue === "with-discount")
     filterCabins = cabins.filter((cabin) => cabin.discount > 0);
 
+  //Sort
+  const sortBy = searchParams.get("sortBy") || "name-asc";
+  const [field, direction] = sortBy.split("-");
+  const modifier = direction === "asc" ? 1 : -1;
+  console.log(modifier);
+  const sortedCabins = filterCabins?.sort(
+    (a, b) => (a[field] - b[field]) * modifier
+  );
   if (isLoading) return <Spinner />;
 
   return (
@@ -38,7 +49,9 @@ function CabinTable() {
         {/* Sol 2.
       //apply render prop pattern */}
         <Table.Body
-          data={filterCabins}
+          //  data={cabins}
+          //data={filterCabins}
+          data={sortedCabins}
           render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
         />
       </Table>
