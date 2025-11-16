@@ -5,6 +5,7 @@ import { useGetCabins } from "./useGetCabins";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 import { useSearchParams } from "react-router-dom";
+import Empty from "../../ui/Empty";
 
 function CabinTable() {
   const { cabins, isLoading } = useGetCabins();
@@ -28,7 +29,7 @@ function CabinTable() {
     (a, b) => (a[field] - b[field]) * modifier
   );
   if (isLoading) return <Spinner />;
-
+  if (!cabins.length) return <Empty resource="cabins" />;
   return (
     <Menus>
       <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">

@@ -1,14 +1,40 @@
+/* eslint-disable no-unused-vars */
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
+import { DATA_PER_PAGE } from "../utils/constants";
+export async function getBookings(filter, sortBy, page) {
+  // Building the Supabase Query Dynamically
+  let query = supabase
+    .from("bookings")
+    // cabins(*) , guests(*) to get the tabels corresponding to the foreign keys
+    //of cabinId and guestId.
+    //cabins(name) , guests(fullName,email) to get the data of speceific columns
+    .select("* , cabins(name) , guests(fullName,email)", { count: "exact" });
 
-export async function getBookings() {
-  const { data, error } = await supabase.from("bookings").select("*");
+  //FILTER
+  if (filter !== null) {
+    query = query[filter.method || "eq"](filter.field, filter.value);
+  }
+  //SORT
+  if (sortBy)
+    query = query.order(sortBy.field, {
+      ascending: sortBy.direction === "asc",
+    });
+
+  //PAGINATION
+  if (page) {
+    const from = (page - 1) * DATA_PER_PAGE;
+    const to = from + (DATA_PER_PAGE - 1);
+    query = query.range(from, to);
+  }
+  const { data, error, count } = await query;
+
   if (error) {
     console.error(error);
     throw new Error("Bookings not found");
   }
 
-  return data;
+  return { data, count };
 }
 export async function getBooking(id) {
   const { data, error } = await supabase
