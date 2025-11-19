@@ -1,7 +1,7 @@
 # The Wild Oasis - internal hotel management system
 Single Page Application built with React.js and Vite
 ## Try it
- [The Wild Oasis - Hotel System]() 
+ [The Wild Oasis - Hotel System](https://wild-oasis-hotel-management-system.netlify.app/dashboard) 
 
 ### Feature Categories:
 
