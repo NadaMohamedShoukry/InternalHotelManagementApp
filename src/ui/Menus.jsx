@@ -86,6 +86,21 @@ function Toggle({ id }) {
 
   //The position of the list needs to be calculated when we click in the button.
   function handleClick(e) {
+    // e.stopPropagation() is a method you call inside an event
+    // handler to stop the event from bubbling up to parent elements.
+    //     What is event propagation?
+
+    // When an event happens (like click), JavaScript handles it in three phases:
+
+    // Capturing phase – event goes from the window → root → down to the target
+
+    // Target phase – event reaches the element you clicked
+
+    // Bubbling phase – event goes back up from the target → its parents → root
+
+    // By default, events bubble up.
+    e.stopPropagation();
+
     const rect = e.target.closest("button").getBoundingClientRect();
     setPosition({
       x: window.innerWidth - rect.width - rect.x,
@@ -101,7 +116,11 @@ function Toggle({ id }) {
 }
 function List({ id, children }) {
   const { openId, position, close } = useContext(MenusContext);
-  const ref = useOutsideClick(close);
+  //the menu is openning immediatly closses then open again so,
+  //do it on bubbling phase not capturaing
+  // but this causes the menu to open then immediatly closes
+  //so stop propagation
+  const ref = useOutsideClick(() => close(), false);
   if (openId !== id) return null;
   return createPortal(
     <StyledList ref={ref} position={position}>
