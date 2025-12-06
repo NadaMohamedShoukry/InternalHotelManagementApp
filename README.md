@@ -1,5 +1,6 @@
 # The Wild Oasis - internal hotel management system
 Single Page Application built with React.js and Vite
+OPen on your PC or Labtop ... This system is intended for internal hotel staff and can be accessed only on PCs or laptops at the reception.
 ## Try it
 [The Wild Oasis - Hotel System](https://wild-oasis-hotel-management-system.netlify.app/dashboard)
 
